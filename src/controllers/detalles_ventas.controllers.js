@@ -54,3 +54,31 @@ export const eliminarDetalleVenta = async (req, res) => {
     });
   }
 };
+
+// Actualizar parcialmente un detalles venta por su ID
+export const actualizarDetallesventaPatch = async (req, res) => {
+    try {
+        const { id_detalle_venta } = req.params;
+        const datos = req.body;
+
+        const [result] = await pool.query(
+            'UPDATE Detalles_ventas SET ? WHERE id_detalle_venta = ?',
+            [datos, id_detalle_venta]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: `Detalles_ventas con ID ${id_detalle_venta} no encontrado.`
+            });
+        }
+
+        res.status(200).json({
+            mensaje: `Detalles_ventas con ID ${id_detalle_venta} actualizado correctamente.`
+        });
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error al actualizar el detalle_venta.',
+            error
+        });
+    }
+};

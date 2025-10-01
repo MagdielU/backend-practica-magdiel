@@ -54,3 +54,30 @@ export const eliminarProducto = async (req, res) => {
     });
   }
 };
+// Actualizar parcialmente un productos por su ID
+export const actualizarProductopatch = async (req, res) => {
+    try {
+        const { id_producto } = req.params;
+        const datos = req.body;
+
+        const [result] = await pool.query(
+            'UPDATE Productos SET ? WHERE id_producto = ?',
+            [datos, id_producto]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: `Productos con ID ${id_producto} no encontrado.`
+            });
+        }
+
+        res.status(200).json({
+            mensaje: `Productos con ID ${id_producto} actualizado correctamente.`
+        });
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error al actualizar el producto.',
+            error
+        });
+    }
+};

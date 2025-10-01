@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { obtenerCategorias, obtenerCategoria, registrarCategoria, eliminarCategoria } from '../controllers/categorias.controllers.js';
+import { obtenerCategorias, obtenerCategoria, registrarCategoria, eliminarCategoria, actualizarCategoria } from '../controllers/categorias.controllers.js';
 
 const router = Router();
 
@@ -15,4 +15,6 @@ router.get('/registrarcategoria', registrarCategoria);
 // Ruta para eliminar un cliente por su ID
 router.delete('/eliminarcategoria/:id_categoria', eliminarCategoria);
 
+//Ruta para atualizar una categoria por su iD
+router.put('/actualizarcategoria/:id_categoria', actualizarCategoria)
 export default router;

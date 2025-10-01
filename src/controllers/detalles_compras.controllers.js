@@ -54,3 +54,31 @@ export const eliminarDetalleCompra = async (req, res) => {
     });
   }
 };
+
+// Actualizar parcialmente un detalles compras por su ID
+export const actualizarDetallescompraPatch = async (req, res) => {
+    try {
+        const { id_detalle_compra } = req.params;
+        const datos = req.body;
+
+        const [result] = await pool.query(
+            'UPDATE Detalles_compras SET ? WHERE id_detalle_compra = ?',
+            [datos, id_detalle_compra]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: `Detalles_compras con ID ${id_detalle_compra} no encontrado.`
+            });
+        }
+
+        res.status(200).json({
+            mensaje: `Detalles_compras con ID ${id_detalle_compra} actualizado correctamente.`
+        });
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error al actualizar el detalle_compra.',
+            error
+        });
+    }
+};

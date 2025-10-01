@@ -61,7 +61,7 @@ export const registrarCompra= async (req, res) => {
 
 export const eliminarCompras = async (req, res) => {
   try {
-    const id_venta = req.params.id_compra;
+    const id_compra = req.params.id_compra;
     const [result] = await pool.query(
       "DELETE FROM compra WHERE id_cliente = ?",
        [id_compra]
@@ -80,4 +80,31 @@ export const eliminarCompras = async (req, res) => {
       error: error,
     });
   }
+};
+// Actualizar parcialmente un compras por su ID
+export const actualizarCompraPatch = async (req, res) => {
+    try {
+        const { id_compra } = req.params;
+        const datos = req.body;
+
+        const [result] = await pool.query(
+            'UPDATE compras SET ? WHERE id_compra = ?',
+            [datos, id_compra]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: `Compras con ID ${id_compra} no encontrado.`
+            });
+        }
+
+        res.status(200).json({
+            mensaje: `Compras con ID ${id_compra} actualizado correctamente.`
+        });
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error al actualizar el compras.',
+            error
+        });
+    }
 };
